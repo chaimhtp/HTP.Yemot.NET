@@ -1,6 +1,0 @@
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\bin\Debug\HTP.Yemot.NET.dll
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\bin\Debug\HTP.Yemot.NET.pdb
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\obj\Debug\HTP.Yemot.NET.csproj.AssemblyReference.cache
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\obj\Debug\HTP.Yemot.NET.csproj.CoreCompileInputs.cache
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\obj\Debug\HTP.Yemot.NET.dll
-E:\Develop\HTP.Yemot.NET\HTP.Yemot.NET\obj\Debug\HTP.Yemot.NET.pdb
