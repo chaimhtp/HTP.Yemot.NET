@@ -51,6 +51,7 @@
     <Compile Include="IdListMessage.cs" />
     <Compile Include="InputOptions.cs" />
     <Compile Include="MessageItem.cs" />
+    <Compile Include="RequestParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Read.cs" />
     <Compile Include="Routing.cs" />

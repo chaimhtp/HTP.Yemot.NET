@@ -2,6 +2,7 @@
 using HTP.Yemot.NET.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace HTP.Yemot.NET
@@ -10,9 +11,13 @@ namespace HTP.Yemot.NET
     // נכתב בהשראת https://github.com/ShlomoCode/yemot-router2
     public class Read
     {
-        public Read(List<MessageItem> messages, InputMode mode, InputOptions options)
+        public Read(List<MessageItem> messages,InputOptions options)
         {
             this.Messages = messages;
+            if (options.DigitsAllowed.Length > 0)
+            {
+                options.Max = options.DigitsAllowed.Max(x => x.ToString().Length);
+            }
             this.InputOptions = options;
         }
         public InputMode InputMode { get; set; }
@@ -28,8 +33,8 @@ namespace HTP.Yemot.NET
                 case InputMode.Tap:
                     ret += TapParameters();
                     break;
-                case InputMode.STT:
-                    ret += STTParameters();
+                case InputMode.Voice:
+                    ret += VoiceParameters();
                     break;
                 case InputMode.Record:
                     ret += RecordParameters();
@@ -45,11 +50,11 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[16];
             prms[0] = "";
-            prms[1] = $"{o.ValName}"; // שם
-            prms[2] = $"{(!o.ReEnterIfExists ? "yes" : "")}"; // קבלת פרמטר מחדש
+            prms[1] = $"{o.ParamName}"; // שם
+            prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = $"{(o.Max != int.MaxValue ? o.Max.ToString() : "")}"; // מקסימום ספרות
             prms[4] = $"{o.Min}"; // מינימום ספרות
-            prms[5] = $"{o.SecWait}"; // זמן המתנה להקשה
+            prms[5] = $"{o.SecondsWait}"; // זמן המתנה להקשה
             prms[6] = $"{Enum.GetName(typeof(InputType), o.PlayOkMode)}"; // צורת השמעת ההקשות למשתמש
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
@@ -57,20 +62,20 @@ namespace HTP.Yemot.NET
             prms[10] = $"{string.Join(".", o.DigitsAllowed)}"; // מקשים מותרים
             prms[11] = $"{o.AmountAttempts}"; // חזרה על השאלה
             prms[12] = $"{(o.ReadNone ? "Ok" : "")}"; // האם לאפשר ערך ריק
-            prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneVar) ? o.ReadNoneVar : "")}"; // ערך שנשלח לשרת במידה וריק
+            prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneValue) ? o.ReadNoneValue : "")}"; // ערך שנשלח לשרת במידה וריק
             prms[14] = $"{((o.PlayOkMode == InputType.HebrewKeyboard || o.PlayOkMode == InputType.EnglishKeyboard || o.PlayOkMode == InputType.EmailKeyboard || o.PlayOkMode == InputType.DigitsKeyboard) && o.BlockChangeTypeLang ? "InsertLettersTypeChangeNo" : "")}"; // חסימת שינוי מקלדת
             prms[15] = $"{(!o.Confirmation ? "no" : "")}"; // בקשת אישור הקשה
 
             string joinedParams = string.Join(",", prms);
             return joinedParams.TrimCommas();
         }
-        private string STTParameters()
+        private string VoiceParameters()
         {
             InputOptions o = this.InputOptions;
             string[] prms = new string[10];
             prms[0] = "";
-            prms[1] = $"{o.ValName}"; // שם
-            prms[2] = $"{(o.ReEnterIfExists ? "yes" : "")}"; // קבלת פרמטר מחדש
+            prms[1] = $"{o.ParamName}"; // שם
+            prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "voice"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{(o.Language)}"; // שפת זיהוי
             prms[5] = $"{(!o.AllowTyping ? "no" : "")}"; // חסימת הקשות
@@ -87,8 +92,8 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[11];
             prms[0] = "";
-            prms[1] = $"{o.ValName}"; // שם
-            prms[2] = $"{(o.ReEnterIfExists ? "yes" : "")}"; // קבלת פרמטר מחדש
+            prms[1] = $"{o.ParamName}"; // שם
+            prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "record"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{o.Path}"; // תיקיית הקלטות
             prms[5] = $"{o.FileName}"; // שם הקובץ

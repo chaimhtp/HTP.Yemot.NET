@@ -5,16 +5,29 @@ namespace HTP.Yemot.NET
 {
     public class Exemple
     {
-        public static string TapRead()
+        /// <summary>
+        /// מאפשר להקריא למשתמש פריט מסויים
+        /// ולבחור מקש 1/2/3 תוך כדי ההשמעה (כמעט אין זמן להגיב - 0.1 שניות)
+        /// או לא לבחור.
+        /// המערכת לא תבקש אישור.
+        /// </summary>
+        /// <param name="paramName">שם הפרמטר</param>
+        /// <param name="projName">שם הפריט</param>
+        /// <returns></returns>
+        public static string TapRead(string paramName, string projName)
         {
             List<MessageItem> messages = new List<MessageItem>();
-            messages.Add(new MessageItem(MessageItemType.Text, "שלום עולם"));
-            messages.Add(new MessageItem(MessageItemType.Text, "ברוכים הבאים"));
-            InputMode mode = InputMode.Tap;
-            InputOptions options = new InputOptions(mode);
-            options.ReEnterIfExists = false;
-            options.DigitsAllowed = new int[] { 1, 2 };
-            Read read = new Read(messages, mode, options);
+            messages.Add(new MessageItem(MessageItemType.Text, "פריט"));
+            messages.Add(new MessageItem(MessageItemType.Text, projName));
+            InputOptions options = new InputOptions();
+            options.ParamName = paramName;
+            options.Min = 0;
+            options.SecondsWait = 0.1;
+            options.Confirmation = false;
+            options.ReadNone = true;
+            options.ReadNoneValue = "2";
+            options.DigitsAllowed = new int[] { 1, 2, 3};
+            Read read = new Read(messages, options);
             return read.ToResponseString();
         }
 

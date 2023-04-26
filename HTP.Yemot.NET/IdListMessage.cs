@@ -21,6 +21,7 @@ namespace HTP.Yemot.NET
         {
             string ret = "id_list_message=";
             ret += this.MessageItems.Concat();
+            ret += "&";
             return ret;
         }
     }
