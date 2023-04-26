@@ -15,7 +15,7 @@ namespace HTP.Yemot.NET
         /// <summary>
         /// RequestParameters init
         /// </summary>
-        /// <param name="requestBodyForm">HttpPost example: HttpContext.Current.Request.Form</param>
+        /// <param name="requestParams">HttpPost example: HttpContext.Current.Request.Form</param>
         public RequestParams(NameValueCollection requestParams)
         {
             dynamic form = requestParams;

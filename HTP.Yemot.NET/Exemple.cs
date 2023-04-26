@@ -12,13 +12,13 @@ namespace HTP.Yemot.NET
         /// המערכת לא תבקש אישור.
         /// </summary>
         /// <param name="paramName">שם הפרמטר</param>
-        /// <param name="projName">שם הפריט</param>
+        /// <param name="itemValue">ערך הפריט</param>
         /// <returns></returns>
-        public static string TapRead(string paramName, string projName)
+        public static string TapRead(string paramName, string itemValue)
         {
             List<MessageItem> messages = new List<MessageItem>();
             messages.Add(new MessageItem(MessageItemType.Text, "פריט"));
-            messages.Add(new MessageItem(MessageItemType.Text, projName));
+            messages.Add(new MessageItem(MessageItemType.Text, itemValue));
             InputOptions options = new InputOptions();
             options.ParamName = paramName;
             options.Min = 0;
