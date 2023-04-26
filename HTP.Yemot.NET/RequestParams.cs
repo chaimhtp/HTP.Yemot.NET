@@ -76,10 +76,18 @@ namespace HTP.Yemot.NET
         /// פרמטר שמציין את השלוחה בה המשתמש ניתק את השיחה
         /// </summary>
         public string ApiHangupExtension { get; set; }
+        private NameValueCollection Form { get; set; }
         /// <summary>
-        /// גישה לפרמטרים נוספים. לדוגמא: Form["param_1"]
+        /// גישה לפרמטרים נוספים.
+        /// במידה וקיים פרמטר עם שם דומה מס' פעמים, הפונקציה תחזיר את הערך האחרון
         /// </summary>
-        public NameValueCollection Form { get; set; }
+        public string GetParamValue(string paramKey)
+        {
+            string paramVal = this.Form[paramKey];
+            string[] tapedsArr = paramVal?.Split(',');
+            string last = tapedsArr?.Last();
+            return last;
+        }
 
         private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {

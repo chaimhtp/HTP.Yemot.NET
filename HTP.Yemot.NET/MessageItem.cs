@@ -7,6 +7,10 @@ namespace HTP.Yemot.NET
         public MessageItem(MessageItemType messageItemType, string value)
         {
             MessageItemType = messageItemType;
+            if (MessageItemType == MessageItemType.Text)
+            {
+                value = value.Replace("-", "").Replace(".", "");
+            }
             Value = value;
         }
         public string Value { get; set; }
