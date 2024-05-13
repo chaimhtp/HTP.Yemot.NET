@@ -9,7 +9,7 @@ namespace HTP.Yemot.NET.Enums
     public enum MessageItemType
     {
         /// <summary>
-        /// השמעת קובץ מתוך המערכת או מהמאגר הגלובלי.
+        /// השמעת קובץ מתוך המערכת או מהמאגר הגלובלי. יש לציין שם הקובץ ללא סיומת.
         /// </summary>
         File,
         /// <summary>

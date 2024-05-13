@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HTP.Yemot.NET.Extensions
 {
-    internal static class Extensions
+    public static class Extensions
     {
         internal static string Concat(this List<MessageItem> messages)
         {
@@ -23,5 +23,10 @@ namespace HTP.Yemot.NET.Extensions
         {
             return str.Trim(',');
         }
+        public static string ToFileFormat(this int fileNum)
+        {
+            return fileNum.ToString("000");
+        }
+
     }
 }

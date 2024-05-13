@@ -1,4 +1,5 @@
 ﻿using HTP.Yemot.NET.Enums;
+using System;
 
 namespace HTP.Yemot.NET
 {
@@ -13,6 +14,8 @@ namespace HTP.Yemot.NET
             //ערכי ברירת מחדל
             this.ParamName = "val";
             this.ReUseIfExists = false;
+            this.InputMode = inputMode;
+            this.DigitsAllowed = new int[0];
             switch (inputMode)
             {
                 case InputMode.Tap:
@@ -23,8 +26,7 @@ namespace HTP.Yemot.NET
                     this.BlockAsterisk = false;
                     this.BlockZero = false;
                     this.ReplaceChar = "";
-                    this.DigitsAllowed = new int[0];
-                    this.AmountAttempts = 0;
+                    this.AmountAttempts = 1;
                     this.ReadNone = false;
                     this.ReadNoneValue = "";
                     this.BlockChangeTypeLang = false;
@@ -58,9 +60,11 @@ namespace HTP.Yemot.NET
         /// ברירת המחדל היא הקשה.
         /// </summary>
         public InputMode InputMode { get; set; }
+        [Obsolete]
         /// <summary>
         /// שם הפרמטר שיצורף לנתון שהתקבל.
         /// </summary>
+        /// 
         public string ParamName { get; set; }
         /// <summary>
         /// האם להשתמש בערך אם כבר קיים.

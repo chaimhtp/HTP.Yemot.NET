@@ -11,7 +11,7 @@ namespace HTP.Yemot.NET
     // נכתב בהשראת https://github.com/ShlomoCode/yemot-router2
     public class Read
     {
-        public Read(List<MessageItem> messages,InputOptions options)
+        public Read(List<MessageItem> messages,InputOptions options, string paramName = null)
         {
             this.Messages = messages;
             if (options.DigitsAllowed.Length > 0)
@@ -19,8 +19,9 @@ namespace HTP.Yemot.NET
                 options.Max = options.DigitsAllowed.Max(x => x.ToString().Length);
             }
             this.InputOptions = options;
+            ParamName = paramName;
         }
-        public InputMode InputMode { get; set; }
+        public string ParamName { get; set; }
         public InputOptions InputOptions { get; set; }
         public List<MessageItem> Messages { get; set; }
 
@@ -28,7 +29,7 @@ namespace HTP.Yemot.NET
         {
             string ret = $"read={this.Messages.Concat()}=";
             InputOptions opt = this.InputOptions;
-            switch (this.InputMode)
+            switch (opt.InputMode)
             {
                 case InputMode.Tap:
                     ret += TapParameters();
@@ -50,7 +51,7 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[16];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{(this.ParamName != null ? this.ParamName : o.ParamName)}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = $"{(o.Max != int.MaxValue ? o.Max.ToString() : "")}"; // מקסימום ספרות
             prms[4] = $"{o.Min}"; // מינימום ספרות
@@ -74,7 +75,7 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[10];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{(this.ParamName != null ? this.ParamName : o.ParamName)}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "voice"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{(o.Language)}"; // שפת זיהוי
@@ -92,7 +93,7 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[11];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{(this.ParamName != null ? this.ParamName : o.ParamName)}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "record"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{o.Path}"; // תיקיית הקלטות
@@ -101,7 +102,7 @@ namespace HTP.Yemot.NET
             prms[7] = $"{(o.RecordHangup ? "yes" : "")}"; // שמירה בניתוק השיחה
             prms[8] = $"{(!string.IsNullOrWhiteSpace(o.FileName) && o.RecordAttach ? "yes" : "")}"; // הוספה על הקלטה קיימת
             prms[9] = $"{o.LengthMin}"; // אורך מינימלי להקלטה
-            prms[10] = $"{o.LengthMax}"; // אורך מקסימלי להקלטה
+            prms[10] = (o.LengthMax != int.MaxValue) ? $"{o.LengthMax}" : ""; // אורך מקסימלי להקלטה
 
             string joinedParams = string.Join(",", prms);
             return joinedParams.TrimCommas();

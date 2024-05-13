@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,8 @@ namespace HTP.Yemot.NET
         {
             dynamic form = requestParams;
             this.Form = form;
+            ConvertParamsToKeyValuePairList(this.Form);
+
             this.ApiCallId = form["ApiCallId"];
             this.ApiPhone = form["ApiPhone"];
             this.ApiDID = form["ApiDID"];
@@ -32,7 +36,9 @@ namespace HTP.Yemot.NET
             string hangupParam = form["hangup"];
             this.Hangup = !string.IsNullOrWhiteSpace(hangupParam) && hangupParam == "yes";
             this.ApiHangupExtension = form["ApiHangupExtension"];
-
+            //this.LastParamKey = this.GetLastParamKey();
+            //this.LastParamValue = this.GetParamValue(this.LastParamKey);
+            //this.LastParam = this.GetLastParam();
         }
         /// <summary>
         /// מזהה ייחודי לאורך השיחה
@@ -76,17 +82,63 @@ namespace HTP.Yemot.NET
         /// פרמטר שמציין את השלוחה בה המשתמש ניתק את השיחה
         /// </summary>
         public string ApiHangupExtension { get; set; }
+        //public KeyValuePair<string, string> LastParam { get; set; }
+        //public string LastParamKey { get; set; }
+        //public string LastParamValue { get; set; }
+        //public bool IsRequestParamsEmpty { get; set; }
         private NameValueCollection Form { get; set; }
+        private List<KeyValuePair<string, string>> Parameters { get; set; }
+        private void ConvertParamsToKeyValuePairList(NameValueCollection form)
+        {
+            this.Parameters = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < form.Count; i++)
+            {
+                string ky = form.Keys[i];
+                string val = form[ky];
+                KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(ky, val);
+                this.Parameters.Add(kvp);
+            }
+            //this.LastParam = this.Parameters.LastOrDefault();
+        }
+
         /// <summary>
         /// גישה לפרמטרים נוספים.
         /// במידה וקיים פרמטר עם שם דומה מס' פעמים, הפונקציה תחזיר את הערך האחרון
         /// </summary>
         public string GetParamValue(string paramKey)
         {
-            string paramVal = this.Form[paramKey];
-            string[] tapedsArr = paramVal?.Split(',');
-            string last = tapedsArr?.Last();
+            KeyValuePair<string, string> prm = this.Parameters.LastOrDefault(x => x.Key == paramKey);
+            return prm.Equals(new KeyValuePair<string, string>()) ? prm.Value : null;
+            //string paramVal = this.Form[paramKey];
+            //string[] tapedsArr = paramVal?.Split(',');
+            //string last = tapedsArr?.Last();
+            //return last;
+        }
+        public KeyValuePair<string, string> GetLastParam()
+        {
+            return this.Parameters.LastOrDefault();
+        }
+        /// <summary>
+        /// גישה לפרמטרים נוספים.
+        /// במידה וקיים פרמטר עם שם דומה מס' פעמים, הפונקציה תחזיר את האחרון
+        /// </summary>
+        public KeyValuePair<string, string> GetParam(string paramKey)
+        {
+            KeyValuePair<string, string> prm = this.Parameters.LastOrDefault(x => x.Key == paramKey);
+            return !prm.IsNull() ? prm : default;
+        }
+
+        public string GetLastParamKey()
+        {
+            string[] prms = this.Form.AllKeys;
+            string last = prms?.LastOrDefault();
             return last;
+        }
+        private bool IsRequestParamsEmpty()
+        {
+            return !this.Parameters.Any();
+            //string[] prms = this.Form.AllKeys;
+            //return !prms.Any();
         }
 
         private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -97,5 +149,12 @@ namespace HTP.Yemot.NET
             return dateTime;
         }
 
+    }
+    public static class RequestParamsExpansions
+    {
+        public static bool IsNull(this KeyValuePair<string, string> keyValuePairOfString)
+        {
+            return keyValuePairOfString.Equals(new KeyValuePair<string, string>());
+        }
     }
 }
