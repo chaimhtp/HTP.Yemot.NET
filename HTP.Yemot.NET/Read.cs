@@ -60,13 +60,12 @@ namespace HTP.Yemot.NET
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
             prms[9] = $"{o.ReplaceChar}"; // החלפת תווים
-            prms[10] = $"{string.Join(".", o.DigitsAllowed)}"; // מקשים מותרים
+            prms[10] = $"{string.Join(".", o.DigitsAllowed)}{(!o.BlockPound ? ".#":"")}{(!o.BlockAsterisk ? ".*" : "")}".TrimStart('.'); // מקשים מותרים
             prms[11] = $"{o.AmountAttempts}"; // חזרה על השאלה
             prms[12] = $"{(o.ReadNone ? "Ok" : "")}"; // האם לאפשר ערך ריק
             prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneValue) ? o.ReadNoneValue : "")}"; // ערך שנשלח לשרת במידה וריק
             prms[14] = $"{((o.PlayOkMode == InputType.HebrewKeyboard || o.PlayOkMode == InputType.EnglishKeyboard || o.PlayOkMode == InputType.EmailKeyboard || o.PlayOkMode == InputType.DigitsKeyboard) && o.BlockChangeTypeLang ? "InsertLettersTypeChangeNo" : "")}"; // חסימת שינוי מקלדת
             prms[15] = $"{(!o.Confirmation ? "no" : "")}"; // בקשת אישור הקשה
-
             string joinedParams = string.Join(",", prms);
             return joinedParams.TrimCommas();
         }
