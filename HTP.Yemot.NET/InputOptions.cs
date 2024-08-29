@@ -24,7 +24,6 @@ namespace HTP.Yemot.NET
                     this.SecondsWait = 7;
                     this.PlayOkMode = InputType.NO;
                     this.BlockAsterisk = false;
-                    this.BlockPound = false;
                     this.BlockZero = false;
                     this.ReplaceChar = "";
                     this.AmountAttempts = 1;
@@ -93,11 +92,6 @@ namespace HTP.Yemot.NET
         /// ברירת מחדל InputType.Digits
         /// </summary>
         public InputType PlayOkMode { get; set; }
-        /// <summary>
-        /// הקשה. האם לחסום את מקש סולמית.
-        /// </summary>
-        /// 
-        public bool BlockPound { get; set; }
         /// <summary>
         /// הקשה. האם לחסום את מקש כוכבית.
         /// </summary>

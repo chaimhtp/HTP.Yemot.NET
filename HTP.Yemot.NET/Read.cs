@@ -60,7 +60,7 @@ namespace HTP.Yemot.NET
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
             prms[9] = $"{o.ReplaceChar}"; // החלפת תווים
-            prms[10] = $"{string.Join(".", o.DigitsAllowed)}{(!o.BlockPound && o.DigitsAllowed.Length > 0 ? ".#":"")}{(!o.BlockAsterisk && o.DigitsAllowed.Length > 0 ? ".*" : "")}".TrimStart('.'); // מקשים מותרים
+            prms[10] = $"{string.Join(".", o.DigitsAllowed)}{(o.DigitsAllowed.Length > 0 ? ".#":"")}{(!o.BlockAsterisk && o.DigitsAllowed.Length > 0 ? ".*" : "")}".TrimStart('.'); // מקשים מותרים
             prms[11] = $"{o.AmountAttempts}"; // חזרה על השאלה
             prms[12] = $"{(o.ReadNone ? "Ok" : "")}"; // האם לאפשר ערך ריק
             prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneValue) ? o.ReadNoneValue : "")}"; // ערך שנשלח לשרת במידה וריק
