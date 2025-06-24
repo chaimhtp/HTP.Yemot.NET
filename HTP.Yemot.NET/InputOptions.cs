@@ -22,7 +22,7 @@ namespace HTP.Yemot.NET
                     this.Max = int.MaxValue;
                     this.Min = 1;
                     this.SecondsWait = 7;
-                    this.PlayOkMode = InputType.NO;
+                    this.PlayOkMode = InputType.Digits;
                     this.BlockAsterisk = false;
                     this.BlockZero = false;
                     this.ReplaceChar = "";
