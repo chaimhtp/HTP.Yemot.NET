@@ -11,7 +11,7 @@ namespace HTP.Yemot.NET
     // נכתב בהשראת https://github.com/ShlomoCode/yemot-router2
     public class Read
     {
-        public Read(List<MessageItem> messages,InputOptions options, string paramName = null)
+        public Read(List<MessageItem> messages, InputOptions options, string paramName = null)
         {
             this.Messages = messages;
             if (options.DigitsAllowed.Length > 0)
@@ -56,11 +56,12 @@ namespace HTP.Yemot.NET
             prms[3] = $"{(o.Max != int.MaxValue ? o.Max.ToString() : "")}"; // מקסימום ספרות
             prms[4] = $"{o.Min}"; // מינימום ספרות
             prms[5] = $"{o.SecondsWait}"; // זמן המתנה להקשה
-            prms[6] = $"{Enum.GetName(typeof(InputType), o.PlayOkMode)}"; // צורת השמעת ההקשות למשתמש
+            //prms[6] = $"{Enum.GetName(typeof(InputType), o.PlayOkMode)}"; // צורת השמעת ההקשות למשתמש
+            prms[6] = $"{(!o.Confirmation ? "" : Enum.GetName(typeof(InputType), o.PlayOkMode))}"; // צורת השמעת ההקשות למשתמש במידה והוגדר לבקש אישור
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
             prms[9] = $"{o.ReplaceChar}"; // החלפת תווים
-            prms[10] = $"{string.Join(".", o.DigitsAllowed)}{(o.DigitsAllowed.Length > 0 ? ".#":"")}{(!o.BlockAsterisk && o.DigitsAllowed.Length > 0 ? ".*" : "")}".TrimStart('.'); // מקשים מותרים
+            prms[10] = $"{string.Join(".", o.DigitsAllowed)}{(o.DigitsAllowed.Length > 0 ? ".#" : "")}{(!o.BlockAsterisk && o.DigitsAllowed.Length > 0 ? ".*" : "")}".TrimStart('.'); // מקשים מותרים
             prms[11] = $"{o.AmountAttempts}"; // חזרה על השאלה
             prms[12] = $"{(o.ReadNone ? "Ok" : "")}"; // האם לאפשר ערך ריק
             prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneValue) ? o.ReadNoneValue : "")}"; // ערך שנשלח לשרת במידה וריק

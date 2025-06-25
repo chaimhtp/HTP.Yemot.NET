@@ -89,7 +89,7 @@ namespace HTP.Yemot.NET
         public double SecondsWait { get; set; }
         /// <summary>
         /// הקשה. באיזה צורה להשמיע למשתמש את מה שהוקש.
-        /// ברירת מחדל InputType.Digits
+        /// ברירת מחדל InputType.Digits במידה והוגדר Confirmation=true
         /// </summary>
         public InputType PlayOkMode { get; set; }
         /// <summary>
