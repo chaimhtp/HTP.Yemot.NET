@@ -7,8 +7,15 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace HTP.Yemot.NET
 {
-    // הסבר בלינק https://f2.freeivr.co.il/topic/56/%D7%9E%D7%95%D7%93%D7%95%D7%9C-api-%D7%AA%D7%A7%D7%A9%D7%95%D7%A8-%D7%A2%D7%9D-%D7%9E%D7%97%D7%A9%D7%91%D7%99%D7%9D-%D7%95%D7%9E%D7%9E%D7%A9%D7%A7%D7%99-%D7%A0%D7%AA%D7%95%D7%A0%D7%99%D7%9D-%D7%97%D7%99%D7%A6%D7%95%D7%A0%D7%99%D7%99%D7%9D/5?_=1681665991555
-    // נכתב בהשראת https://github.com/ShlomoCode/yemot-router2
+    /// <summary>
+    /// קבלת נתונים מהמשתמש
+    /// <para>
+    /// הסבר בלינק: <see href="https://f2.freeivr.co.il/topic/56/%D7%9E%D7%95%D7%93%D7%95%D7%9C-api-%D7%AA%D7%A7%D7%A9%D7%95%D7%A8-%D7%A2%D7%9D-%D7%9E%D7%97%D7%A9%D7%91%D7%99%D7%9D-%D7%95%D7%9E%D7%9E%D7%A9%D7%A7%D7%99-%D7%A0%D7%AA%D7%95%D7%A0%D7%99%D7%9D-%D7%97%D7%99%D7%A6%D7%95%D7%A0%D7%99%D7%99%D7%9D/5?_=1681665991555"/>
+    /// </para>
+    /// <para>
+    /// נכתב בהשראת: <see href="https://github.com/ShlomoCode/yemot-router2"/>
+    /// </para>
+    /// </summary>
     public class Read
     {
         public Read(List<MessageItem> messages, InputOptions options, string paramName = null)
@@ -57,7 +64,7 @@ namespace HTP.Yemot.NET
             prms[4] = $"{o.Min}"; // מינימום ספרות
             prms[5] = $"{o.SecondsWait}"; // זמן המתנה להקשה
             //prms[6] = $"{Enum.GetName(typeof(InputType), o.PlayOkMode)}"; // צורת השמעת ההקשות למשתמש
-            prms[6] = $"{(!o.Confirmation ? "" : Enum.GetName(typeof(InputType), o.PlayOkMode))}"; // צורת השמעת ההקשות למשתמש במידה והוגדר לבקש אישור
+            prms[6] = $"{(!o.Confirmation ? "NO" : Enum.GetName(typeof(InputType), o.PlayOkMode))}"; // צורת השמעת ההקשות למשתמש במידה והוגדר לבקש אישור
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
             prms[9] = $"{o.ReplaceChar}"; // החלפת תווים
