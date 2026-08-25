@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HTP.Yemot.NET.Extensions
 {
-    internal static class Extensions
+    public static class Extensions
     {
         internal static string Concat(this List<MessageItem> messages)
         {
@@ -22,6 +22,13 @@ namespace HTP.Yemot.NET.Extensions
         internal static string TrimCommas(this string str)
         {
             return str.Trim(',');
+        }
+        /// <summary>
+        /// המרת מספר קובץ לפורמט שם קובץ במערכת (3 ספרות)
+        /// </summary>
+        public static string ToFileFormat(this int fileNum)
+        {
+            return fileNum.ToString("000");
         }
     }
 }

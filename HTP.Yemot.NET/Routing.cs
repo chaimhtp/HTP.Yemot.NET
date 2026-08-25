@@ -1,29 +1,45 @@
-﻿namespace HTP.Yemot.NET
+namespace HTP.Yemot.NET
 {
     public class Routing
     {
         public string BaseBranchPath { get; set; }
-        public string BaseFilesPath { get; set; }
+        public string BranchPath { get; set; }
+        private string Path { get; set; }
         private readonly string GoTo = "go_to_folder=";
 
         /// <summary>
         /// for example:
-        /// baseBranchPath = "/6/9/"
-        /// baseFilesPath = "0/9/"
+        /// branchPath = "/6/9/"
+        /// baseBranchPath = "/0/"
         /// </summary>
-        public Routing(string baseBranchPath, string baseFilesPath)
+        public Routing(string branchPath, string baseBranchPath = null)
         {
             this.BaseBranchPath = baseBranchPath;
-            this.BaseFilesPath = baseFilesPath;
+            this.BranchPath = branchPath;
+            this.Path = (!string.IsNullOrWhiteSpace(this.BaseBranchPath) ? this.BaseBranchPath : "") + this.BranchPath;
         }
-        public string FilePath(string fileNum)
+        public Routing()
         {
-            return $"f-{this.BaseBranchPath}{this.BaseFilesPath}{fileNum}.";
         }
-        public string GoToBranch(string branchPath)
+        public string GoToBranch()
         {
-            return $"{this.BaseBranchPath}{this.GoTo}{branchPath}";
+            return this.GoTo + this.Path;
         }
-
+        /// <summary>
+        /// מעבר מחדש לשלוחה הרצויה
+        /// </summary>
+        public string RestartExtension(string extension)
+        {
+            this.Path = "/" + extension;
+            return GoToBranch();
+        }
+        /// <summary>
+        /// חזרה שלוחה אחת אחורה
+        /// </summary>
+        public string OneExtensionBack()
+        {
+            this.Path = "..";
+            return GoToBranch();
+        }
     }
 }

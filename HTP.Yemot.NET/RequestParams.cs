@@ -20,6 +20,7 @@ namespace HTP.Yemot.NET
         {
             dynamic form = requestParams;
             this.Form = form;
+            ConvertParamsToKeyValuePairList(this.Form);
             this.ApiCallId = form["ApiCallId"];
             this.ApiPhone = form["ApiPhone"];
             this.ApiDID = form["ApiDID"];
@@ -78,6 +79,21 @@ namespace HTP.Yemot.NET
         public string ApiHangupExtension { get; set; }
         private NameValueCollection Form { get; set; }
         /// <summary>
+        /// כלל הפרמטרים שהתקבלו בבקשה, לפי סדר הגעתם
+        /// </summary>
+        private List<KeyValuePair<string, string>> Parameters { get; set; }
+
+        private void ConvertParamsToKeyValuePairList(NameValueCollection form)
+        {
+            this.Parameters = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < form.Count; i++)
+            {
+                string key = form.Keys[i];
+                string value = form[key];
+                this.Parameters.Add(new KeyValuePair<string, string>(key, value));
+            }
+        }
+        /// <summary>
         /// גישה לפרמטרים נוספים.
         /// במידה וקיים פרמטר עם שם דומה מס' פעמים, הפונקציה תחזיר את הערך האחרון
         /// </summary>
@@ -87,6 +103,34 @@ namespace HTP.Yemot.NET
             string[] tapedsArr = paramVal?.Split(',');
             string last = tapedsArr?.Last();
             return last;
+        }
+        /// <summary>
+        /// הפרמטר האחרון שהתקבל בבקשה
+        /// </summary>
+        public KeyValuePair<string, string> GetLastParam()
+        {
+            return this.Parameters.LastOrDefault();
+        }
+        /// <summary>
+        /// הפרמטר האחרון בשם המבוקש.
+        /// במידה ולא קיים, מוחזר KeyValuePair ריק (ניתן לבדוק באמצעות IsNull)
+        /// </summary>
+        public KeyValuePair<string, string> GetParam(string paramKey)
+        {
+            KeyValuePair<string, string> param = this.Parameters.LastOrDefault(x => x.Key == paramKey);
+            return param.IsNull() ? new KeyValuePair<string, string>() : param;
+        }
+        /// <summary>
+        /// שם הפרמטר האחרון שהתקבל בבקשה
+        /// </summary>
+        public string GetLastParamKey()
+        {
+            return this.Form.AllKeys?.LastOrDefault();
+        }
+
+        private bool IsRequestParamsEmpty()
+        {
+            return !this.Parameters.Any();
         }
 
         private DateTime UnixTimeStampToDateTime(double unixTimeStamp)

@@ -11,7 +11,7 @@ namespace HTP.Yemot.NET
     // נכתב בהשראת https://github.com/ShlomoCode/yemot-router2
     public class Read
     {
-        public Read(List<MessageItem> messages,InputOptions options)
+        public Read(List<MessageItem> messages, InputOptions options, string paramName = null)
         {
             this.Messages = messages;
             if (options.DigitsAllowed.Length > 0)
@@ -19,16 +19,20 @@ namespace HTP.Yemot.NET
                 options.Max = options.DigitsAllowed.Max(x => x.ToString().Length);
             }
             this.InputOptions = options;
+            this.ParamName = paramName;
         }
-        public InputMode InputMode { get; set; }
+        /// <summary>
+        /// שם הפרמטר שיצורף לנתון שהתקבל.
+        /// גובר על ParamName של InputOptions.
+        /// </summary>
+        public string ParamName { get; set; }
         public InputOptions InputOptions { get; set; }
         public List<MessageItem> Messages { get; set; }
 
         public string ToResponseString()
         {
             string ret = $"read={this.Messages.Concat()}=";
-            InputOptions opt = this.InputOptions;
-            switch (this.InputMode)
+            switch (this.InputOptions.InputMode)
             {
                 case InputMode.Tap:
                     ret += TapParameters();
@@ -50,16 +54,18 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[16];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{this.ParamName ?? o.ParamName}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = $"{(o.Max != int.MaxValue ? o.Max.ToString() : "")}"; // מקסימום ספרות
             prms[4] = $"{o.Min}"; // מינימום ספרות
             prms[5] = $"{o.SecondsWait}"; // זמן המתנה להקשה
-            prms[6] = $"{Enum.GetName(typeof(InputType), o.PlayOkMode)}"; // צורת השמעת ההקשות למשתמש
+            prms[6] = $"{(!o.Confirmation ? "NO" : Enum.GetName(typeof(InputType), o.PlayOkMode))}"; // צורת השמעת ההקשות למשתמש
             prms[7] = $"{(o.BlockAsterisk ? "yes" : "")}"; // האם לחסום כוכבית
             prms[8] = $"{(o.BlockZero ? "yes" : "")}"; // האם לחסום כמות אפס
             prms[9] = $"{o.ReplaceChar}"; // החלפת תווים
-            prms[10] = $"{string.Join(".", o.DigitsAllowed)}"; // מקשים מותרים
+            prms[10] = (string.Join(".", o.DigitsAllowed)
+                        + (o.DigitsAllowed.Length > 0 ? ".#" : "")
+                        + (!o.BlockAsterisk && o.DigitsAllowed.Length > 0 ? ".*" : "")).TrimStart('.'); // מקשים מותרים (בתוספת # ו-* במידת הצורך)
             prms[11] = $"{o.AmountAttempts}"; // חזרה על השאלה
             prms[12] = $"{(o.ReadNone ? "Ok" : "")}"; // האם לאפשר ערך ריק
             prms[13] = $"{(o.ReadNone && !string.IsNullOrWhiteSpace(o.ReadNoneValue) ? o.ReadNoneValue : "")}"; // ערך שנשלח לשרת במידה וריק
@@ -74,7 +80,7 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[10];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{this.ParamName ?? o.ParamName}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "voice"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{(o.Language)}"; // שפת זיהוי
@@ -92,7 +98,7 @@ namespace HTP.Yemot.NET
             InputOptions o = this.InputOptions;
             string[] prms = new string[11];
             prms[0] = "";
-            prms[1] = $"{o.ParamName}"; // שם
+            prms[1] = $"{this.ParamName ?? o.ParamName}"; // שם
             prms[2] = $"{(o.ReUseIfExists ? "yes" : "")}"; // שימוש בערך אם כבר קיים
             prms[3] = "record"; // סוג הנתון הנלקח מהמשתמש
             prms[4] = $"{o.Path}"; // תיקיית הקלטות
@@ -101,7 +107,7 @@ namespace HTP.Yemot.NET
             prms[7] = $"{(o.RecordHangup ? "yes" : "")}"; // שמירה בניתוק השיחה
             prms[8] = $"{(!string.IsNullOrWhiteSpace(o.FileName) && o.RecordAttach ? "yes" : "")}"; // הוספה על הקלטה קיימת
             prms[9] = $"{o.LengthMin}"; // אורך מינימלי להקלטה
-            prms[10] = $"{o.LengthMax}"; // אורך מקסימלי להקלטה
+            prms[10] = $"{(o.LengthMax != int.MaxValue ? o.LengthMax.ToString() : "")}"; // אורך מקסימלי להקלטה
 
             string joinedParams = string.Join(",", prms);
             return joinedParams.TrimCommas();
